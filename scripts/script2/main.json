@@ -1,0 +1,14 @@
+{
+    "script_name": "testowy skrypt2 console hello world",
+    "description": "asdf asdf",
+    "author": "Jan Nowak",
+    "creation_date": "2025-02-05",
+    "last_modified": "2025-02-05",
+    "requirements": [
+      "Python 3.x",
+      "biblioteka pandas"
+    ],
+    "license": "MIT",
+    "tags": ["data processing", "automation"]
+  }
+  
