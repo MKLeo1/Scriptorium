@@ -1,29 +1,30 @@
 import os
-import subprocess
 import customtkinter as ctk
 import json
+from .script_runner import ScriptRunner  # Import klasy ScriptRunner
 
 class ScriptDescriptionFrame(ctk.CTkFrame):
     def __init__(self, parent, scripts_folder):
         super().__init__(parent, corner_radius=0, fg_color="gray10", border_width=0)
         self.pack(side="right", fill="both", expand=True, padx=5, pady=5)
-        
+
         self.scripts_folder = scripts_folder
         self.current_script = None
-        
+        self.script_runner = ScriptRunner(scripts_folder)  # Inicjalizacja ScriptRunner
+
         self.title_label = ctk.CTkLabel(self, text="Description", font=("Arial", 18, "bold"))
         self.title_label.pack(pady=(10, 5))
-        
+
         self.description_text = ctk.CTkTextbox(self, wrap="word", width=400, height=300)
         self.description_text.pack(pady=5, padx=5, fill="both", expand=True)
-        
-        self.start_button = ctk.CTkButton(self, text="Start Script", command=self.start_script, fg_color="blue", hover_color="darkblue")
+
+        self.start_button = ctk.CTkButton(
+            self, text="Start Script", command=self.start_script, fg_color="blue", hover_color="darkblue"
+        )
         self.start_button.pack(pady=10)
-    
+
     def update_details(self, script_name):
-        """
-        Loads and displays the description for the selected script.
-        """
+        """Loads and displays the description for the selected script."""
         self.current_script = script_name
         script_folder = os.path.join(self.scripts_folder, script_name)
         description_file = os.path.join(script_folder, "main.json")
@@ -47,23 +48,10 @@ class ScriptDescriptionFrame(ctk.CTkFrame):
         self.title_label.configure(text=script_name)
         self.description_text.delete("1.0", ctk.END)
         self.description_text.insert(ctk.END, description)
-    
+
     def start_script(self):
-        """
-        Runs the selected script's main.py file in a new terminal.
-        """
+        """Delegates script execution to ScriptRunner."""
         if self.current_script:
-            script_path = os.path.join(self.scripts_folder, self.current_script, "main.py")
-            if os.path.exists(script_path):
-                terminal_cmd = [
-                    "gnome-terminal", "--", "sh", "-c", f"python3 '{script_path}'; exec $SHELL"
-                ]
-                try:
-                    subprocess.Popen(terminal_cmd)
-                    print(f"Started script: {self.current_script}")
-                except FileNotFoundError:
-                    print("Error: Terminal emulator not found.")
-            else:
-                print("Error: main.py not found in the selected script folder.")
+            self.script_runner.start_script(self.current_script)  # Użyj ScriptRunner do uruchomienia skryptu
         else:
             print("No script selected.")
