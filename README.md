@@ -1,5 +1,7 @@
-Script description files must be .json
-every script entry must be named main.py
+1.Program need installed package CustomTkinter
+2. If using virtual environment remember to change path in app.py
+3.Script description files must be .json
+4.every script entry must be named main.py
 
 example
 {

@@ -4,15 +4,16 @@ import json
 from .script_runner import ScriptRunner  # Import klasy ScriptRunner
 
 class ScriptDescriptionFrame(ctk.CTkFrame):
+    
     def __init__(self, parent, scripts_folder):
         super().__init__(parent, corner_radius=0, fg_color="gray10", border_width=0)
         self.pack(side="right", fill="both", expand=True, padx=5, pady=5)
 
         self.scripts_folder = scripts_folder
         self.current_script = None
-        self.script_runner = ScriptRunner(scripts_folder)  # Inicjalizacja ScriptRunner
+        self.script_runner = ScriptRunner(scripts_folder) 
 
-        self.title_label = ctk.CTkLabel(self, text="Description", font=("Arial", 18, "bold"))
+        self.title_label = ctk.CTkLabel(self, text="", font=("Open Sans", 16, "bold"))
         self.title_label.pack(pady=(10, 5))
 
         self.description_text = ctk.CTkTextbox(self, wrap="word", width=400, height=300)
@@ -23,8 +24,9 @@ class ScriptDescriptionFrame(ctk.CTkFrame):
         )
         self.start_button.pack(pady=10)
 
+    # Loads and displays the description for the selected script
     def update_details(self, script_name):
-        """Loads and displays the description for the selected script."""
+        
         self.current_script = script_name
         script_folder = os.path.join(self.scripts_folder, script_name)
         description_file = os.path.join(script_folder, "main.json")
@@ -49,9 +51,10 @@ class ScriptDescriptionFrame(ctk.CTkFrame):
         self.description_text.delete("1.0", ctk.END)
         self.description_text.insert(ctk.END, description)
 
+    # Delegates script execution to ScriptRunner
     def start_script(self):
-        """Delegates script execution to ScriptRunner."""
+        
         if self.current_script:
-            self.script_runner.start_script(self.current_script)  # Użyj ScriptRunner do uruchomienia skryptu
+            self.script_runner.start_script(self.current_script)  
         else:
             print("No script selected.")
