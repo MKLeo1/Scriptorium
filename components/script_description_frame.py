@@ -1,7 +1,8 @@
 import os
 import customtkinter as ctk
+from tkinter import messagebox
 import json
-from .script_runner import ScriptRunner  # Import klasy ScriptRunner
+from .script_runner import ScriptRunner
 
 class ScriptDescriptionFrame(ctk.CTkFrame):
     
@@ -11,13 +12,17 @@ class ScriptDescriptionFrame(ctk.CTkFrame):
 
         self.scripts_folder = scripts_folder
         self.current_script = None
-        self.script_runner = ScriptRunner(scripts_folder) 
+        self.script_runner = ScriptRunner(scripts_folder)
+        self.script_runner.set_callbacks(self.update_status, self.script_completed)
 
         self.title_label = ctk.CTkLabel(self, text="", font=("Open Sans", 16, "bold"))
         self.title_label.pack(pady=(10, 5))
 
         self.description_text = ctk.CTkTextbox(self, wrap="word", width=400, height=300)
         self.description_text.pack(pady=5, padx=5, fill="both", expand=True)
+
+        self.status_label = ctk.CTkLabel(self, text="Status: Idle", font=("Open Sans", 12))
+        self.status_label.pack(pady=(5, 5))
 
         self.start_button = ctk.CTkButton(
             self, text="Start Script", command=self.start_script, fg_color="blue", hover_color="darkblue"
@@ -26,7 +31,6 @@ class ScriptDescriptionFrame(ctk.CTkFrame):
 
     # Loads and displays the description for the selected script
     def update_details(self, script_name):
-        
         self.current_script = script_name
         script_folder = os.path.join(self.scripts_folder, script_name)
         description_file = os.path.join(script_folder, "main.json")
@@ -53,8 +57,13 @@ class ScriptDescriptionFrame(ctk.CTkFrame):
 
     # Delegates script execution to ScriptRunner
     def start_script(self):
-        
         if self.current_script:
-            self.script_runner.start_script(self.current_script)  
+            self.script_runner.start_script(self.current_script)
         else:
             print("No script selected.")
+            
+    def update_status(self, status_text):
+        self.status_label.configure(text=f"Status: {status_text}")
+
+    def script_completed(self, result_text):
+        messagebox.showinfo("Wykonanie skryptu", result_text)
