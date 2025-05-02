@@ -1,7 +1,7 @@
 import os
 import customtkinter as ctk
-from .script_list_frame import ScriptListFrame
-from .script_description_frame import ScriptDescriptionFrame
+from components.script_list_frame import ScriptListFrame
+from components.script_description_frame import ScriptDescriptionFrame
 
 class MainAppWindow(ctk.CTk):
     
@@ -13,7 +13,7 @@ class MainAppWindow(ctk.CTk):
 
         # determine the scripts folder (relative to the location of the app entry point - app.py file)
         base_dir = os.path.dirname(os.path.abspath(__file__))  # Directory, where is app.py (app entry point)
-        self.scripts_folder = os.path.join(base_dir,  "..","scripts")  # path to "scripts" directory
+        self.scripts_folder = os.path.join(base_dir, "..", "scripts")  # path to "scripts" directory
 
         # Left: Script list frame
         self.script_list_frame = ScriptListFrame(self, self.scripts_folder, self.on_script_selected)
