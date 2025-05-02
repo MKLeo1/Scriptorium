@@ -1,15 +1,15 @@
 import customtkinter as ctk
+import os
+import json
 
 class ScriptDescriptionFrame(ctk.CTkFrame):
-
-    ##############################Initialize the ScriptDescriptionFrame with the parent widget.#############################
-
-    def __init__(self, parent):
-        """status       
-        :param parent: Parent widget
-        """
+    def __init__(self, parent, scripts_folder, script_runner):
         super().__init__(parent, corner_radius=0, fg_color="gray15", border_width=0)
         self.pack(side="right", fill="both", expand=True, padx=0, pady=0)
+        
+        self.scripts_folder = scripts_folder
+        self.script_runner = script_runner
+        self.current_script = None
 
         # GUI Elements
         self.title_label = ctk.CTkLabel(
@@ -31,13 +31,84 @@ class ScriptDescriptionFrame(ctk.CTkFrame):
         )
         self.description_text.pack(fill="both", expand=True, padx=10, pady=10)
 
-    ##############################Set the description text for the selected script.#############################
+        # Button directly use script_runner
+        self.start_button = ctk.CTkButton(
+            self, 
+            text="Start Script", 
+            command=self._start_script,
+            fg_color="blue", 
+            hover_color="darkblue"
+        )
+        self.start_button.pack(pady=10)
 
-    def set_description(self, description):
-        """     
-        :param description: Description text to display
-        """
+################################ Update the description text area with script details #############################
+
+    def update_details(self, script_name):
+        self.current_script = script_name
+        script_folder = os.path.join(self.scripts_folder, script_name)
+        description_file = os.path.join(script_folder, "main.json")
+
         self.description_text.configure(state="normal")
         self.description_text.delete("1.0", "end")
-        self.description_text.insert("1.0", description)
-        self.description_text.configure(state="disabled")
+        
+        if os.path.exists(description_file):
+
+ 
+
+            with open(description_file, "r", encoding="utf-8") as f:
+ 
+
+                try:
+ 
+
+                    data = json.load(f)
+ 
+
+                    description = f"Description: {data.get('description', 'Brak opisu')}\n\n"
+ 
+
+                    description += f"Author: {data.get('author', 'Nieznany')}\n"
+ 
+
+                    description += f"Created: {data.get('creation_date', 'Brak danych')}\n"
+ 
+
+                    description += f"Last Modified: {data.get('last_modified', 'Brak danych')}\n"
+ 
+
+                    description += f"Requirements: {', '.join(data.get('requirements', []))}\n"
+ 
+
+                    description += f"License: {data.get('license', 'Brak informacji')}\n"
+
+
+                    description += f"Tags: {', '.join(data.get('tags', []))}"
+ 
+
+                except json.JSONDecodeError:
+ 
+
+                    description = "Błąd: Nieprawidłowy format JSON."
+ 
+
+        else:
+ 
+
+            description = "No description available for this script."
+ 
+
+
+ 
+
+        self.title_label.configure(text=script_name)
+ 
+
+        self.description_text.delete("1.0", ctk.END)
+ 
+
+        self.description_text.insert(ctk.END, description)
+
+############################### Start script execution ####################
+    def _start_script(self):
+        if self.current_script:
+            self.script_runner.start_script(self.current_script)

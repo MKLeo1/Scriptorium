@@ -5,7 +5,7 @@ import shlex
 
 class ScriptRunner:
 
-    ##############################Initialize the ScriptRunner with the folder containing scripts.#############################
+    ############################## Initialize the ScriptRunner with the folder containing scripts #############################
     
     def __init__(self, scripts_folder):
 
@@ -13,13 +13,13 @@ class ScriptRunner:
         self.status_callback = None
         self.complete_callback = None
 
-    ##############################Set callbacks for status updates and script completion.#############################
+    ############################## Set callbacks for status updates and script completion #############################
 
     def set_callbacks(self, status_callback, complete_callback):
         self.status_callback = status_callback
         self.complete_callback = complete_callback
 
-    ##############################Start script execution in a Linux terminal.#############################
+    ############################## Start script execution in a Linux terminal #############################
 
     def start_script(self, script_name):
         script_path = os.path.join(self.scripts_folder, script_name, "main.py")
@@ -34,7 +34,7 @@ class ScriptRunner:
         thread.start()
         return True
 
-    ##############################Run the script in a Linux terminal using GNOME Terminal.#############################
+    ############################## Run the script in a Linux terminal using GNOME Terminal ############################
 
     def _run_linux(self, script_path, script_name):
         try:
@@ -67,7 +67,7 @@ class ScriptRunner:
             print(f"Error executing terminal: {str(e)}")  # Debug
             self._script_completed(script_name, False, f"Failed to launch terminal: {str(e)}")
 
-    ##############################Create a clean environment without Snap variables.#############################
+    ############################## Create a clean environment without Snap variables #############################
 
     def _clean_env(self):
         env = os.environ.copy()
@@ -76,13 +76,13 @@ class ScriptRunner:
             del env[var]
         return env
 
-    ##############################Update status through the callback.#############################
+    ############################## Update status through the callback #############################
 
     def _update_status(self, message):
         if callable(self.status_callback):
             self.status_callback(message)
 
-    ##############################Handle script completion.#############################
+    ############################## Handle script completion #############################
 
     def _script_completed(self, script_name, success, error_msg=None):
         status = "completed successfully" if success else f"failed: {error_msg or 'unknown error'}"

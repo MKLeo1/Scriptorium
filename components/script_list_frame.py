@@ -3,9 +3,10 @@ import customtkinter as ctk
 
 class ScriptListFrame(ctk.CTkFrame):
 
-    ##############################Initialize the ScriptListFrame with the parent and scripts folder.#############################
+    ############################## Initialize the ScriptListFrame with the parent and scripts folder #############################
 
     def __init__(self, parent, scripts_folder, on_script_selected):
+
         """
         :param parent: Parent widget
         :param scripts_folder: Path to scripts directory
@@ -31,10 +32,9 @@ class ScriptListFrame(ctk.CTkFrame):
 
         self.update_scripts()
 
-    ##############################Scan the scripts folder and return valid script directories.#############################
+    ##############################S can the scripts folder and return valid script directories #############################
 
     def get_scripts(self):
-        """Scan scripts folder and return valid script directories"""
         scripts = []
         
         # Create scripts folder if it doesn't exist
@@ -52,10 +52,10 @@ class ScriptListFrame(ctk.CTkFrame):
 
         return sorted(scripts)  # Return alphabetically sorted
 
-    ##############################Create buttons for each available script.#############################
+    ############################## Create buttons for each available script #############################
 
     def create_script_buttons(self):
-        """Create buttons for each available script"""
+        
         # Clear existing buttons
         for widget in self.buttons_frame.winfo_children():
             widget.destroy()
@@ -74,8 +74,7 @@ class ScriptListFrame(ctk.CTkFrame):
             )
             btn.pack(pady=2, fill="x", padx=5)
     
-    ##############################Refresh the list of scripts.#############################
+    ############################## Refresh the list of scripts #############################
 
     def update_scripts(self):
-        """Refresh the list of scripts"""
         self.create_script_buttons()
