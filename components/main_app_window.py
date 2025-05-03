@@ -3,8 +3,11 @@ import customtkinter as ctk
 from components.script_list_frame import ScriptListFrame
 from components.script_description_frame import ScriptDescriptionFrame
 from components.script_runner import ScriptRunner
+ 
+############################## Initialize the MainAppWindow with the parent customtkinter and scripts folder #############################
 
-class MainAppWindow(ctk.CTk):    
+class MainAppWindow(ctk.CTk):   
+
     def __init__(self):
         super().__init__()
         self.title("Scriptorium")

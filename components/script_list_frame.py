@@ -6,12 +6,10 @@ class ScriptListFrame(ctk.CTkFrame):
     ############################## Initialize the ScriptListFrame with the parent and scripts folder #############################
 
     def __init__(self, parent, scripts_folder, on_script_selected):
-
-        """
-        :param parent: Parent widget
-        :param scripts_folder: Path to scripts directory
-        :param on_script_selected: Callback when script is selected
-        """
+        
+        # parent: Parent widget
+        # scripts_folder: Path to scripts directory
+        # on_script_selected: Callback when script is selected
         
         super().__init__(parent, corner_radius=0, fg_color="gray20", border_width=0)
         self.pack(side="left", fill="y", padx=0, pady=0)
@@ -23,7 +21,7 @@ class ScriptListFrame(ctk.CTkFrame):
         self.title_label = ctk.CTkLabel(
             self, 
             text="Available Scripts:", 
-            font=("Open Sans", 16, "bold")
+            font=("ubuntu", 16, "bold")
         )
         self.title_label.pack(pady=(10, 5))
         
