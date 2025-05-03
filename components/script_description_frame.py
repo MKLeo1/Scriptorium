@@ -16,9 +16,10 @@ class ScriptDescriptionFrame(ctk.CTkFrame):
             self,
             text="Script Description",
             font=("ubuntu", 16, "bold"),
-            anchor="w"
+            anchor="center",
+            justify="center"
         )
-        self.title_label.pack(pady=(10, 5), padx=10, anchor="w")
+        self.title_label.pack(pady=(10, 5), padx=10, fill="x")
 
         self.description_text = ctk.CTkTextbox(
             self,
