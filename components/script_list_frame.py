@@ -30,7 +30,7 @@ class ScriptListFrame(ctk.CTkFrame):
 
         self.update_scripts()
 
-    ##############################S can the scripts folder and return valid script directories #############################
+    ############################## Create scripts folder and return valid script directories #############################
 
     def get_scripts(self):
         scripts = []
