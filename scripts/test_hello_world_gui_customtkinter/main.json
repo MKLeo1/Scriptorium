@@ -8,7 +8,7 @@
   "tags": ["data processing", "automation"],
 
   "virtualenv": {
-    "path": "/home/user/venvs/script_venv/bin/python",
+    "path": "/home/leo/VirtualEnvironments/customtkinter_venv/bin/python3",
     "requirements_file": "requirements.txt"
   }
 }

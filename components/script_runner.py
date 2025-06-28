@@ -54,7 +54,6 @@ class ScriptRunner:
             safe_script_path = shlex.quote(script_path)
             python_cmd = venv_python if venv_python else "python3"
             cmd = ['gnome-terminal', '--', 'bash', '-c', f'{python_cmd} {safe_script_path}; exec bash']
-            print(f"Executing command: {' '.join(cmd)}")  # Debug output
             
             process = subprocess.Popen(
                 cmd,
@@ -64,16 +63,14 @@ class ScriptRunner:
                 start_new_session=True
             )
             
-            # Wait briefly to check if terminal launched
             try:
-                _, stderr = process.communicate(timeout=0.5)
+                _, stderr = process.communicate(timeout=0.1)
                 if process.returncode != 0:
                     error_msg = stderr.decode().strip()
                     print(f"Terminal failed with error: {error_msg}")  # Debug
                     raise subprocess.CalledProcessError(process.returncode, cmd, stderr=stderr)
             except subprocess.TimeoutExpired:
                 # Terminal launched successfully and is still running
-                print("Terminal launched successfully")  # Debug
                 self._script_completed(script_name, True)
                 return
                 
