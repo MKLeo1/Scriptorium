@@ -67,7 +67,6 @@ class ScriptRunner:
                 _, stderr = process.communicate(timeout=0.1)
                 if process.returncode != 0:
                     error_msg = stderr.decode().strip()
-                    print(f"Terminal failed with error: {error_msg}")  # Debug
                     raise subprocess.CalledProcessError(process.returncode, cmd, stderr=stderr)
             except subprocess.TimeoutExpired:
                 # Terminal launched successfully and is still running
@@ -75,7 +74,6 @@ class ScriptRunner:
                 return
                 
         except Exception as e:
-            print(f"Error executing terminal: {str(e)}")  # Debug
             self._script_completed(script_name, False, f"Failed to launch terminal: {str(e)}")
 
     ############################## Get Python path from virtualenv config #############################
