@@ -1,5 +1,14 @@
 {
-    "script_name": "Testowy skrypt z customtkinter",
-    "description": "Testowy skrypt z customtkinter"
+  "script_name": "test script with venv custom tkinter",
+  "description": "hello world",
+  "author": "Jan Nowak",
+  "creation_date": "2025-02-05",
+  "requirements": ["pandas>=1.3.0", "numpy>=1.21.0"],
+  "license": "MIT",
+  "tags": ["data processing", "automation"],
+
+  "virtualenv": {
+    "path": "/home/user/venvs/script_venv/bin/python",
+    "requirements_file": "requirements.txt"
+  }
 }
-  

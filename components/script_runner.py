@@ -2,13 +2,13 @@ import os
 import subprocess
 import threading
 import shlex
+import json
 
 class ScriptRunner:
 
     ############################## Initialize the ScriptRunner with the folder containing scripts #############################
     
     def __init__(self, scripts_folder):
-
         self.scripts_folder = scripts_folder
         self.status_callback = None
         self.complete_callback = None
@@ -22,24 +22,38 @@ class ScriptRunner:
     ############################## Start script execution in a Linux terminal #############################
 
     def start_script(self, script_name):
-        script_path = os.path.join(self.scripts_folder, script_name, "main.py")
+        script_dir = os.path.join(self.scripts_folder, script_name)
+        script_path = os.path.join(script_dir, "main.py")
+        config_path = os.path.join(script_dir, "main.json")
         
         if not os.path.exists(script_path):
             self._update_status(f"Error: main.py not found in {script_name}")
             return False
 
+        try:
+            # Load venv configuration
+            venv_python = self._get_venv_python(config_path)
+        except Exception as e:
+            self._update_status(f"Error loading config: {str(e)}")
+            return False
+
         self._update_status(f"Executing: {script_name}...")
         
-        thread = threading.Thread(target=self._run_linux, args=(script_path, script_name), daemon=True)
+        thread = threading.Thread(
+            target=self._run_terminal,
+            args=(script_path, script_name, venv_python),
+            daemon=True
+        )
         thread.start()
         return True
 
     ############################## Run the script in a Linux terminal using GNOME Terminal ############################
 
-    def _run_linux(self, script_path, script_name):
+    def _run_terminal(self, script_path, script_name, venv_python=None):
         try:
             safe_script_path = shlex.quote(script_path)
-            cmd = ['gnome-terminal', '--', 'bash', '-c', f'python3 {safe_script_path}; exec bash']
+            python_cmd = venv_python if venv_python else "python3"
+            cmd = ['gnome-terminal', '--', 'bash', '-c', f'{python_cmd} {safe_script_path}; exec bash']
             print(f"Executing command: {' '.join(cmd)}")  # Debug output
             
             process = subprocess.Popen(
@@ -66,6 +80,21 @@ class ScriptRunner:
         except Exception as e:
             print(f"Error executing terminal: {str(e)}")  # Debug
             self._script_completed(script_name, False, f"Failed to launch terminal: {str(e)}")
+
+    ############################## Get Python path from virtualenv config #############################
+
+    def _get_venv_python(self, config_path):
+        if not os.path.exists(config_path):
+            return None
+
+        with open(config_path) as f:
+            config = json.load(f)
+        
+        if "virtualenv" in config and "path" in config["virtualenv"]:
+            venv_path = config["virtualenv"]["path"]
+            if os.path.exists(venv_path):
+                return venv_path
+        return None
 
     ############################## Create a clean environment without Snap variables #############################
 
